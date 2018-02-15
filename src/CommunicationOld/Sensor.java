@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Communication;
+package CommunicationOld;
 
 /**
  * This class contains all information regarding sensors
@@ -15,7 +15,7 @@ public class Sensor
     private final String controller;
     private final String type;
     private int bitNr;
-    //private int value;
+    private int value;
     private boolean state;
     //Address for this sensor
     private final byte SENSOR_ADDRESS;
@@ -68,13 +68,13 @@ public class Sensor
      * Set the state of the sensor(HIGH / LOW)
      * @param state The state wished to set upon this sensor
      */
-     public void setState(boolean state)
+     public void toggleState()
     {
-        if(state == true && this.state != true)
-        this.state = state;
+        if(state == true)
+            state = false;
         
-        if(state != true && this.state == true)
-        this.state = state;
+        else if(state  == false)
+                state = false;
     }
     
      /**
@@ -103,15 +103,21 @@ public class Sensor
         return this.SENSOR_ADDRESS;
     }
     
-    /*
+    /**
+     * Set value of field value
+     * @param inValue set value
+     */
         public void setValue(int inValue)
     {
         this.value = inValue;
     }
-    
+    /**
+     * Return int of value
+     * @return Return value field
+     */
     public int getValue()
     {
         return this.value;
     }
-    */
+    
 }
