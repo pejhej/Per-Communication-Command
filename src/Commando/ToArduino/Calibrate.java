@@ -13,10 +13,61 @@ import Commando.Commando;
  */
 public class Calibrate extends Commando
 {
+    private byte[] xSteps;
+    private byte[] ySteps;
+    private byte[] zSteps;
+    private final static int byteSize = 2;
+
+  
     
     public Calibrate(byte commandAddress)
     {
         super(commandAddress);
+        xSteps = null;
+        ySteps = null;
+        zSteps = null;
+        
     }
+    
+    
+    
+    
+      public byte[] getxSteps()
+    {
+        return xSteps;
+    }
+
+    public void setxSteps(byte[] xSteps)
+    {
+        this.xSteps = xSteps;
+    }
+
+    public byte[] getySteps()
+    {
+        return ySteps;
+    }
+
+    public void setySteps(byte[] ySteps)
+    {
+        this.ySteps = ySteps;
+    }
+
+    public byte[] getzSteps()
+    {
+        return zSteps;
+    }
+
+    public void setzSteps(byte[] zSteps)
+    {
+        this.zSteps = zSteps;
+    }
+    
+    
+        public static int getByteSize()
+    {
+        return byteSize;
+    }
+    
+    
     
 }

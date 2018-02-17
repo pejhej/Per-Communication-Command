@@ -34,6 +34,12 @@ public class Commando
     private byte[] value;
     private int nrOfBytes = 1;
     
+    //Flag for what controller this command is designated
+    private boolean linearRobot = false;
+    private boolean elevatorRobot = false;
+
+
+    
     //Constructor
     public Commando(byte commandAddress)
     {
@@ -107,5 +113,46 @@ public class Commando
        this.value[0] = b;
     }
     
+    
+    
+        public static byte getCommandAddress()
+    {
+        return commandAddress;
+    }
+
+    public static void setCommandAddress(byte commandAddress)
+    {
+        Commando.commandAddress = commandAddress;
+    }
+
+    public int getNrOfBytes()
+    {
+        return nrOfBytes;
+    }
+
+    public void setNrOfBytes(int nrOfBytes)
+    {
+        this.nrOfBytes = nrOfBytes;
+    }
+
+    public boolean isForLinearRobot()
+    {
+        return linearRobot;
+    }
+
+    public void setLinearRobot(boolean linearRobot)
+    {
+        this.linearRobot = linearRobot;
+    }
+
+    public boolean isForElevatorRobot()
+    {
+        return elevatorRobot;
+    }
+
+    public void setElevatorRobot(boolean elevatorRobot)
+    {
+        this.elevatorRobot = elevatorRobot;
+    }
     
 }
