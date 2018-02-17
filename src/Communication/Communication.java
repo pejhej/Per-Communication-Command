@@ -110,16 +110,43 @@ public class Communication implements Runnable
             if (cmdStqry.forLinearRobot())
                 returnByteLinear = readByteFromAddr(linearRobot, cmd.getCmdAddr(), 1);
 
-      
-            //Find the retrievend command and preform the State Update
-            updateState(cmdReg.findCommand(linearRobot , returnByteElevator[0]));
-            updateState(cmdReg.findCommand(elevatorRobot, returnByteLinear[0]));
-            
+              //Find the retrievend command and preform the State Update
+             //updateState(cmdReg.findCommand(returnByteElevator[0]));
+            // updateState(cmdReg.findCommand(returnByteLinear[0]));
+            checkState(cmdReg.findCommand(returnByteElevator[0]), cmdReg.findCommand(returnByteLinear[0]));
             //Reset the state request
-            ((StateRequest) cmd).reset();
+            //((StateRequest) cmd).reset();
         }
-
     }
+    
+    /**
+     * Checks if the state from both controller is ReadyToRecieve(command). If so, the state(command) flag Triggered is set to true
+     * If not, the one command, if not both states which are NOT ReadyToRecieve are set to true.
+     * @param cmd1 Command to check
+     * @param cmd2 Other command to check
+     */
+     private void checkState(Commando cmd1,Commando cmd2) 
+     {
+        if((cmd1 instanceof ReadyToRecieve) &&(cmd2 instanceof ReadyToRecieve))
+            triggerCommand(cmd1);
+        
+        else if(!(cmd1 instanceof ReadyToRecieve))
+            triggerCommand(cmd1);
+        
+        else if(!(cmd2 instanceof ReadyToRecieve))
+            triggerCommand(cmd2);
+     }
+    /**
+     * Trigger the state of the given command
+     * @param cmd Command to trigger
+     */
+     private void triggerCommand(Commando cmd)
+     {
+         cmd.setTriggered(true);
+     }
+    
+   
+    
 
     /**
      * Do the move command as specified
@@ -134,11 +161,19 @@ public class Communication implements Runnable
         byte[] xyByte = new byte[cmdMove.getxValue().length + cmdMove.getyValue().length];
         System.arraycopy(cmdMove.getxValue(), 0, xyByte, 0, cmdMove.getxValue().length);
         System.arraycopy(cmdMove.getyValue(), 0, xyByte, cmdMove.getxValue().length, cmdMove.getxValue().length);
+        
         //Write the respective x-y-z values to the respective controllers
         writeByteToAddr(linearRobot, xyByte, cmd.getCmdAddr());
         writeByteToAddr(elevatorRobot, cmdMove.getzValue(), cmd.getCmdAddr());
+        
+        
     }
-
+    /**
+     * Do the required steps for a successfull calibration regarding communication 
+     * Sends the calibration command to every member.
+     * Read the answers comming back and stores them in the calibration command.
+     * @param cmd The calibration command, with given values etc to be updated by the recieved byte after calibration
+     */
     public void doCalibrate(Commando cmd)
     {
         //Do the X-Y movement first and send to the controller
@@ -159,8 +194,9 @@ public class Communication implements Runnable
         cmdCali.setySteps(ySteps);
 
         cmdCali.setzSteps(elevatorByteCalib);
-
     }
+    
+    
 
     /**
      * Sets up the I2C bus with platform and initiates the connection
@@ -341,6 +377,7 @@ public class Communication implements Runnable
      * @param device Device to set state for
      * @param cmd The state
      */
+    /*
     private void updateState(I2CDevice device, Commando cmd)
     {
         if(device.equals(linearRobot))
@@ -349,7 +386,8 @@ public class Communication implements Runnable
         if(device.equals(elevatorRobot))
             cmd.setElevatorRobot(true);
     }
-
+    */
+    
     /*
     
     WAITING FOR READY TO RECIEVE
@@ -385,4 +423,6 @@ public class Communication implements Runnable
     
     
      */
+
+   
 }
